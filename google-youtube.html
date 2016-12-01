@@ -79,7 +79,7 @@ Custom property | Description | Default
 
   <template>
     <div id="container" style$="{{_computeContainerStyle(width, height)}}">
-      <template is="dom-if" if="{{thumbnail}}">
+      <template is="dom-if" if="{{hideThumbnail}}">
         <img id="thumbnail"
              src$="{{thumbnail}}"
              title="YouTube video thumbnail."
@@ -87,7 +87,7 @@ Custom property | Description | Default
              on-tap="_handleThumbnailTap">
       </template>
 
-      <template is="dom-if" if="{{!thumbnail}}">
+      <template is="dom-if" if="{{!hideThumbnail}}">
         <template is="dom-if" if="{{videoId}}">
           <google-youtube-api on-api-load="_apiLoad"></google-youtube-api>
         </template>
@@ -324,6 +324,14 @@ Custom property | Description | Default
       },
 
       /**
+       * Determine if video of thumbnail will be showed
+       */
+      hideThumbnail : {
+          type: Boolean,
+          value: false
+      }
+
+      /**
        * If `fluid` is set, then the player will set its width to 100% to fill
        * the parent container, while adding `padding-top` to preserve the
        * aspect ratio provided by `width` and `height`. If `width` and `height`
@@ -466,6 +474,9 @@ Custom property | Description | Default
         this.width = '100%';
         this.height = 'auto';
         this.$.container.style['padding-top'] = ratio + '%';
+      }
+     if (this.thumbnail) {
+          this.hideThumbnail = true;
       }
     },
 
@@ -774,7 +785,7 @@ Custom property | Description | Default
 
     _handleThumbnailTap: function() {
       this.autoplay = 1;
-      this.thumbnail = '';
+      this.hideThumbnail = false;
     }
   });
 </script>
